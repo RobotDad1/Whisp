@@ -2,7 +2,7 @@ import express from 'express';
 // const cors = require('cors');
 import path from "path";
 import authRoutes from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.route.js";
+// import messageRoutes from "./routes/message.route.js";
 
 
 const __dirname = path.resolve();
