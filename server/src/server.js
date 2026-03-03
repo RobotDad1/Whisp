@@ -1,5 +1,6 @@
 import express from 'express';
-// const cors = require('cors');
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import path from "path";
 import authRoutes from "./routes/auth.route.js";
 // import messageRoutes from "./routes/message.route.js";
@@ -16,8 +17,8 @@ app.use(express.json());
 // import { app, server } from "./lib/socket.js";
 
 // app.use(express.json({ limit: "5mb" })); // req.body
-// app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
-// app.use(cookieParser());
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 // app.use("/api/messages", messageRoutes);
