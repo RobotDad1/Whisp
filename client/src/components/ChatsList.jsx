@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
-import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
+import UsersLoadingSkeleton from "./UsersLoadingSkeleton.jsx";
 import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
