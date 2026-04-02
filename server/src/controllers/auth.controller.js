@@ -3,6 +3,7 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { ENV } from "../lib/env.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -72,7 +73,18 @@ export const login = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
-    if (!user.isVerified) return res.status(401).json({ message: "Please verify your email to login", requiresVerification: true });
+    if (!user.isVerified) {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.otp = otp;
+      user.otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+      await user.save();
+      try {
+        await sendOtpEmail(user.email, otp);
+      } catch (error) {
+        console.error("Failed to resend OTP email:", error);
+      }
+      return res.status(401).json({ message: "Please verify your email to login. A new OTP has been sent.", requiresVerification: true });
+    }
 
     generateToken(user._id, res);
 
@@ -105,10 +117,10 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
-    user.isVerified = true;
-    user.otp = undefined;
-    user.otpExpiry = undefined;
-    await user.save();
+    await User.updateOne({ _id: user._id }, {
+      $set: { isVerified: true },
+      $unset: { otp: 1, otpExpiry: 1 }
+    });
 
     generateToken(user._id, res);
 
