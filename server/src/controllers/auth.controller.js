@@ -1,4 +1,4 @@
-import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import { sendWelcomeEmail, sendOtpEmail, sendPasswordResetEmail } from "../emails/emailHandlers.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
@@ -34,27 +34,22 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      // before CR:
-      // generateToken(newUser._id, res);
-      // await newUser.save();
-
-      // after CR:
-      // Persist user first, then issue auth cookie
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      newUser.otp = otp;
+      newUser.otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
+      
       const savedUser = await newUser.save();
-      generateToken(savedUser._id, res);
+      
+      try {
+        await sendOtpEmail(savedUser.email, otp);
+      } catch (error) {
+        console.error("Failed to send OTP email:", error);
+      }
 
       res.status(201).json({
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
+        message: "Account created. Please verify your email.",
+        email: savedUser.email
       });
-
-      try {
-        await sendWelcomeEmail(savedUser.email, savedUser.fullName, ENV.CLIENT_URL);
-      } catch (error) {
-        console.error("Failed to send welcome email:", error);
-      }
     } else {
       res.status(400).json({ message: "Invalid user data" });
     }
@@ -70,12 +65,14 @@ export const login = async (req, res) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  try {
+    try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
+
+    if (!user.isVerified) return res.status(401).json({ message: "Please verify your email to login", requiresVerification: true });
 
     generateToken(user._id, res);
 
@@ -94,6 +91,92 @@ export const login = async (req, res) => {
 export const logout = (_, res) => {
   res.cookie("jwt", "", { maxAge: 0 });
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (user.isVerified) return res.status(400).json({ message: "User already verified" });
+
+    if (user.otp !== otp || user.otpExpiry < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    generateToken(user._id, res);
+
+    try {
+      await sendWelcomeEmail(user.email, user.fullName, ENV.CLIENT_URL);
+    } catch (error) {
+      console.error("Failed to send welcome email:", error);
+    }
+
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.error("Error in verifyOtp controller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetPasswordOtp = otp;
+    user.resetPasswordOtpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+    await user.save();
+
+    await sendPasswordResetEmail(user.email, otp);
+
+    res.status(200).json({ message: "Password reset OTP sent" });
+  } catch (error) {
+    console.error("Error in forgotPassword controller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (user.resetPasswordOtp !== otp || user.resetPasswordOtpExpiry < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    user.resetPasswordOtp = undefined;
+    user.resetPasswordOtpExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Error in resetPassword controller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const updateProfile = async (req, res) => {

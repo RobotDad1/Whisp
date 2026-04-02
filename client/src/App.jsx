@@ -2,6 +2,8 @@ import {  Route, Routes, Navigate } from "react-router-dom";
 import ChatPage from "./pages/ChatPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import VerifyOtpPage from "./pages/VerifyOtpPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import PageLoader from "./components/PageLoader";
@@ -28,6 +30,8 @@ function App() {
         <Route path="/" element={authUser ? <ChatPage /> : <Navigate to={"/login"} />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to={"/"} />} />
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />} />
+        <Route path="/verify-otp" element={!authUser ? <VerifyOtpPage /> : <Navigate to={"/"} />} />
+        <Route path="/forgot-password" element={!authUser ? <ForgotPasswordPage /> : <Navigate to={"/"} />} />
       </Routes>
 
       <Toaster />

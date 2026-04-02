@@ -50,3 +50,39 @@ export function createWelcomeEmailTemplate(name, clientURL) {
     </html>
     `;
 }
+
+export function createOtpEmailTemplate(otp) {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Verify your email</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2>Email Verification</h2>
+        <p>Please use the following OTP to verify your email. This OTP is valid for 5 minutes.</p>
+        <h1 style="background: #eee; padding: 10px; display: inline-block; letter-spacing: 5px;">${otp}</h1>
+        <p>If you did not request this, please ignore this email.</p>
+    </body>
+    </html>
+    `;
+}
+
+export function createPasswordResetEmailTemplate(otp) {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Password Reset</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2>Reset Your Password</h2>
+        <p>You requested a password reset. Please use the following OTP to set a new password. This OTP is valid for 5 minutes.</p>
+        <h1 style="background: #eee; padding: 10px; display: inline-block; letter-spacing: 5px;">${otp}</h1>
+        <p>If you did not request this, please safely ignore this email.</p>
+    </body>
+    </html>
+    `;
+}

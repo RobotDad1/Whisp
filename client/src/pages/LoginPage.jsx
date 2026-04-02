@@ -2,15 +2,20 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
 import { MessageCircleIcon, MailIcon, LoaderIcon, LockIcon } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login, isLoggingIn } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(formData);
+    login(formData, navigate);
+  };
+
+  const handleGuestLogin = () => {
+    login({ email: "guest9897@gmail.com", password: "123456" }, navigate);
   };
 
   return (
@@ -41,7 +46,7 @@ function LoginPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input"
-                        placeholder="johndoe@gmail.com"
+                        placeholder="johnBanegaDon@gmail.com"
                       />
                     </div>
                   </div>
@@ -60,6 +65,11 @@ function LoginPage() {
                         placeholder="Enter your password"
                       />
                     </div>
+                    <div className="mt-2 flex justify-end">
+                      <Link to="/forgot-password" className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors">
+                        Forgot Password?
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Submit Button */}
@@ -70,10 +80,18 @@ function LoginPage() {
                       "Sign In"
                     )}
                   </button>
+                  <button
+                    type="button"
+                    onClick={handleGuestLogin}
+                    className="w-full py-3 px-4 rounded-xl font-medium transition-all duration-200 border border-slate-600 hover:bg-slate-800 text-cyan-400"
+                    disabled={isLoggingIn}
+                  >
+                    Login as Guest User
+                  </button>
                 </form>
 
                 <div className="mt-6 text-center">
-                  <Link to="/signup" className="auth-link">
+                  <Link to="/signup" className="auth-link block font-medium">
                     Don't have an account? Sign Up
                   </Link>
                 </div>
