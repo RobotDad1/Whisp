@@ -43,10 +43,13 @@ function LoginPage() {
 
                       <input
                         type="email"
+                        id="email"
+                        name="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input"
                         placeholder="johnBanegaDon@gmail.com"
+                        autoComplete="email"
                       />
                     </div>
                   </div>
@@ -59,10 +62,13 @@ function LoginPage() {
 
                       <input
                         type="password"
+                        id="password"
+                        name="password"
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         className="input"
                         placeholder="Enter your password"
+                        autoComplete="current-password"
                       />
                     </div>
                     <div className="mt-2 flex justify-end">

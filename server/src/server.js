@@ -21,10 +21,16 @@ app.use("/api/messages", messageRoutes);
 
 
 if (ENV.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../client/dist")));
-
-    app.get("*", (_, res) => {
-    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+    const clientPath = path.join(__dirname, "../client/dist");
+    
+    // Only serve static files if the frontend build exists (to prevent ENOENT on API-only deployments)
+    import('fs').then(fs => {
+        if (fs.existsSync(clientPath)) {
+            app.use(express.static(clientPath));
+            app.get("*", (_, res) => {
+                res.sendFile(path.join(clientPath, "index.html"));
+            });
+        }
     });
 }
 
