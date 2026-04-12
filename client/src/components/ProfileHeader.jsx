@@ -1,13 +1,15 @@
 import { useState, useRef } from "react";
-import { LogOutIcon, VolumeOffIcon, Volume2Icon } from "lucide-react";
+import { LogOutIcon, VolumeOffIcon, Volume2Icon, PaletteIcon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
+import { useThemeStore } from "../store/useThemeStore";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
 function ProfileHeader() {
   const { logout, authUser, updateProfile } = useAuthStore();
   const { isSoundEnabled, toggleSound } = useChatStore();
+  const { setTheme } = useThemeStore();
   const [selectedImg, setSelectedImg] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -67,6 +69,25 @@ function ProfileHeader() {
 
         {/* BUTTONS */}
         <div className="flex gap-4 items-center">
+          {/* THEME MENU */}
+          <div className="dropdown dropdown-end">
+            <button
+              tabIndex={0}
+              className="text-slate-400 hover:text-slate-200 transition-colors pt-2"
+              title="Change Theme"
+            >
+              <PaletteIcon className="size-5" />
+            </button>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-slate-800 rounded-box w-32 border border-slate-700 font-medium text-slate-200"
+            >
+              <li><button onClick={() => setTheme("default")}>Default</button></li>
+              <li><button onClick={() => setTheme("glass")}>Glass Mode</button></li>
+              <li><button onClick={() => setTheme("soft")}>WhatsApp</button></li>
+            </ul>
+          </div>
+
           {/* LOGOUT BTN */}
           <button
             className="text-slate-400 hover:text-slate-200 transition-colors"

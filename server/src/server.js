@@ -21,7 +21,7 @@ app.use("/api/messages", messageRoutes);
 
 
 if (ENV.NODE_ENV === "production") {
-    const clientPath = path.join(__dirname, "../client/dist");
+    const clientPath = path.join(__dirname, "../../client/dist");
     
     // Only serve static files if the frontend build exists (to prevent ENOENT on API-only deployments)
     import('fs').then(fs => {
