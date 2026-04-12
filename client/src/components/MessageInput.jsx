@@ -45,7 +45,7 @@ function MessageInput() {
   };
 
   return (
-    <div className="p-4 border-t border-slate-700/50">
+    <div className="p-4 border-t transition-colors duration-300 group-data-[theme=glass]/theme:border-slate-700/50 group-data-[theme=dark]/theme:border-[#202c33] group-data-[theme=dark]/theme:bg-[#202c33] group-data-[theme=whatsapp]/theme:border-[#f0f2f5] group-data-[theme=whatsapp]/theme:bg-[#f0f2f5] border-slate-700/50">
       {imagePreview && (
         <div className="max-w-3xl mx-auto mb-3 flex items-center">
           <div className="relative">
@@ -73,7 +73,10 @@ function MessageInput() {
             setText(e.target.value);
             isSoundEnabled && playRandomKeyStrokeSound();
           }}
-          className="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-4"
+          className="flex-1 rounded-lg py-2 px-4 outline-none transition-colors duration-300
+          group-data-[theme=glass]/theme:bg-slate-800/50 group-data-[theme=glass]/theme:border-slate-700/50 group-data-[theme=glass]/theme:text-white group-data-[theme=glass]/theme:placeholder-slate-400
+          group-data-[theme=dark]/theme:bg-[#2a3942] group-data-[theme=dark]/theme:border-transparent group-data-[theme=dark]/theme:text-white group-data-[theme=dark]/theme:placeholder-slate-400
+          group-data-[theme=whatsapp]/theme:bg-[#ffffff] group-data-[theme=whatsapp]/theme:border-[#ffffff] group-data-[theme=whatsapp]/theme:text-[#111b21] group-data-[theme=whatsapp]/theme:placeholder-slate-500 bg-slate-800/50 border-slate-700/50"
           placeholder="Type your message..."
         />
 
@@ -88,8 +91,11 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-4 transition-colors ${
-            imagePreview ? "text-cyan-500" : ""
+          className={`rounded-lg px-4 transition-colors duration-300 
+          group-data-[theme=glass]/theme:bg-slate-800/50 group-data-[theme=glass]/theme:text-slate-400 group-data-[theme=glass]/theme:hover:text-slate-200
+          group-data-[theme=dark]/theme:bg-[#2a3942] group-data-[theme=dark]/theme:text-slate-400 group-data-[theme=dark]/theme:hover:text-slate-200
+          group-data-[theme=whatsapp]/theme:bg-transparent group-data-[theme=whatsapp]/theme:text-[#54656f] group-data-[theme=whatsapp]/theme:hover:text-[#111b21] bg-slate-800/50 text-slate-400 hover:text-slate-200 ${
+            imagePreview ? "group-data-[theme=glass]/theme:text-cyan-500 group-data-[theme=dark]/theme:text-[#00a884] group-data-[theme=whatsapp]/theme:text-[#00a884] text-cyan-500" : ""
           }`}
         >
           <ImageIcon className="w-5 h-5" />
@@ -97,7 +103,10 @@ function MessageInput() {
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg px-4 py-2 font-medium hover:from-cyan-600 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg px-4 py-2 font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
+          group-data-[theme=glass]/theme:bg-gradient-to-r group-data-[theme=glass]/theme:from-cyan-500 group-data-[theme=glass]/theme:to-cyan-600 group-data-[theme=glass]/theme:hover:from-cyan-600 group-data-[theme=glass]/theme:hover:to-cyan-700 group-data-[theme=glass]/theme:text-white
+          group-data-[theme=dark]/theme:bg-[#00a884] group-data-[theme=dark]/theme:hover:bg-[#008f6f] group-data-[theme=dark]/theme:text-white
+          group-data-[theme=whatsapp]/theme:bg-[#00a884] group-data-[theme=whatsapp]/theme:hover:bg-[#008f6f] group-data-[theme=whatsapp]/theme:text-white bg-gradient-to-r from-cyan-500 to-cyan-600 text-white"
         >
           <SendIcon className="w-5 h-5" />
         </button>

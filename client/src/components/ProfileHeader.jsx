@@ -80,11 +80,14 @@ function ProfileHeader() {
             </button>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-slate-800 rounded-box w-32 border border-slate-700 font-medium text-slate-200"
+              className="dropdown-content z-[1] menu p-2 shadow rounded-box w-32 border font-medium transition-colors duration-300
+              group-data-[theme=glass]/theme:bg-slate-800 group-data-[theme=glass]/theme:border-slate-700 group-data-[theme=glass]/theme:text-slate-200
+              group-data-[theme=dark]/theme:bg-[#202c33] group-data-[theme=dark]/theme:border-slate-700 group-data-[theme=dark]/theme:text-slate-200
+              group-data-[theme=whatsapp]/theme:bg-[#ffffff] group-data-[theme=whatsapp]/theme:border-[#d1d7db] group-data-[theme=whatsapp]/theme:text-[#111b21]"
             >
-              <li><button onClick={() => setTheme("default")}>Default</button></li>
               <li><button onClick={() => setTheme("glass")}>Glass Mode</button></li>
-              <li><button onClick={() => setTheme("soft")}>WhatsApp</button></li>
+              <li><button onClick={() => setTheme("dark")}>Dark Mode</button></li>
+              <li><button onClick={() => setTheme("whatsapp")}>WhatsApp</button></li>
             </ul>
           </div>
 

@@ -69,19 +69,22 @@ function ChatContainer() {
                 <div key={msg._id} className="space-y-6">
                   {showDateHeader && (
                     <div className="flex justify-center my-4">
-                      <span className="bg-slate-800 text-slate-400 text-xs px-3 py-1 rounded-full">
+                      <span className="text-xs px-3 py-1 rounded-full shadow-sm transition-colors duration-300
+                        group-data-[theme=glass]/theme:bg-slate-800 group-data-[theme=glass]/theme:text-slate-400
+                        group-data-[theme=dark]/theme:bg-[#202c33] group-data-[theme=dark]/theme:text-slate-400
+                        group-data-[theme=whatsapp]/theme:bg-white group-data-[theme=whatsapp]/theme:text-slate-500 bg-slate-800 text-slate-400">
                         {currentDateStr}
                       </span>
                     </div>
                   )}
                   <div
-                    className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+                    className={`chat transition-all duration-300 ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
                   >
                     <div
-                      className={`chat-bubble relative ${
+                      className={`chat-bubble relative transition-colors duration-300 ${
                         msg.senderId === authUser._id
-                          ? "bg-cyan-600 text-white"
-                          : "bg-slate-800 text-slate-200"
+                          ? "group-data-[theme=glass]/theme:bg-cyan-600 group-data-[theme=glass]/theme:text-white group-data-[theme=dark]/theme:bg-[#005c4b] group-data-[theme=dark]/theme:text-white group-data-[theme=whatsapp]/theme:bg-[#d9fdd3] group-data-[theme=whatsapp]/theme:text-[#111b21] bg-cyan-600 text-white"
+                          : "group-data-[theme=glass]/theme:bg-slate-800 group-data-[theme=glass]/theme:text-slate-200 group-data-[theme=dark]/theme:bg-[#202c33] group-data-[theme=dark]/theme:text-slate-200 group-data-[theme=whatsapp]/theme:bg-white group-data-[theme=whatsapp]/theme:text-[#111b21] bg-slate-800 text-slate-200"
                       }`}
                     >
                       {msg.image && (
