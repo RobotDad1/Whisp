@@ -19,7 +19,7 @@ function LoginPage() {
   };
 
   return (
-    // <div className="w-full flex items-center justify-center p-4 bg-slate-900">
+    <div className="w-full flex items-center justify-center p-4 bg-#0b141a">
       <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row">
@@ -126,7 +126,7 @@ function LoginPage() {
           </div>
         </BorderAnimatedContainer>
       </div>
-    // </div>
+    </div>
   );
 }
 export default LoginPage;

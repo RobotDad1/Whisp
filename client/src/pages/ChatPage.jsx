@@ -1,4 +1,4 @@
-import { useChatStore } from "../store/useChatStore";
+import { useChatStore } from "../store/UseChatStore";
 
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
 import ProfileHeader from "../components/ProfileHeader";
