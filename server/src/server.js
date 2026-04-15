@@ -7,7 +7,10 @@ import messageRoutes from "./routes/message.route.js";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import { app, server } from "./lib/socket.js";
-const __dirname = path.resolve();
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const PORT = ENV.PORT || 3000;
 
 
@@ -21,16 +24,12 @@ app.use("/api/messages", messageRoutes);
 
 
 if (ENV.NODE_ENV === "production") {
-    const clientPath = path.join(__dirname, "client", "dist");
-    
-    // Only serve static files if the frontend build exists (to prevent ENOENT on API-only deployments)
-    import('fs').then(fs => {
-        if (fs.existsSync(clientPath)) {
-            app.use(express.static(clientPath));
-            app.get("*", (_, res) => {
-                res.sendFile(path.join(clientPath, "index.html"));
-            });
-        }
+    const clientPath = path.join(__dirname, "../../client/dist");
+
+    app.use(express.static(clientPath));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(clientPath, "index.html"));
     });
 }
 

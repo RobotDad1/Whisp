@@ -75,7 +75,7 @@ Client (React) ↔ Server (Node/Express) ↔ Database (MongoDB)
 
 |🌙 Dark Theme | 💚 WhatsApp Theme | 💜 Purple Theme |
 |--------|------------|----------------|
-| ![](./client/public/screenshots/DarkTheme.png) | ![](./client/public/screenshots/WhatsAppTheme.png) | ![](./client/public/screenshots/PurpleTheme.png) |
+| ![](./client/public/screenshots/DarkTheme.png) | ![](./client/public/screenshots/WhatsappTheme.png) | ![](./client/public/screenshots/PurpleTheme.png) |
 
 ---
 
